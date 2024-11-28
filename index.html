@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>스터디 타이머</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: white;
+            color: #333;
+        }
+
+        .container {
+            padding: 60px 40px;
+            width: 100%;
+            max-width: 100%;
+            height: 100vh;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            margin-bottom: 40px;
+        }
+
+        .logo img {
+            width: 302px;
+            height: 108px;
+            object-fit: contain;
+        }
+
+        .message-text {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            margin-bottom: 40px;
+        }
+
+        .ampm {
+            font-size: 70px;
+            color: #666;
+            margin-right: 50px;
+            writing-mode: horizontal-tb;
+        }
+
+        #clock {
+            font-size: 172px;
+            font-weight: 300;
+            color: #333;
+        }
+
+        .period-indicator {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #f8f9fa;
+            color: #495057;
+            border-radius: 12px;
+            font-size: 40px;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        #message {
+            font-size: 20px;
+            min-height: 30px;
+            margin-bottom: 30px;
+            color: #495057;
+        }
+
+        .memo-section {
+            margin: 40px auto 0;
+            width: 300px;
+            transform: rotate(-2deg);
+        }
+
+        .post-it {
+            background: #82dcff82;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            min-height: 180px;
+            border-radius: 2px;
+            text-align: center;
+        }
+
+        .post-it::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .memo-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        #custom-message {
+            width: 100%;
+            min-height: 120px;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            resize: none;
+            line-height: 1.5;
+        }
+
+        #custom-message:focus {
+            outline: none;
+        }
+
+        #custom-message::placeholder {
+            color: #919191;
+        }
+
+        .main-content {
+            max-width: 906px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .time-container {
+        position: relative;
+        margin-bottom: 40px;
+    }
+
+    .time-display {
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        position: relative;
+        z-index: 1;
+    }
+
+    #message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 36px; /* 글씨 크기 증가 */
+        font-weight: 700; /* 더 굵은 폰트 웨이트 */
+        color: #01439A;
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 20px 40px; /* 패딩 증가 */
+        border-radius: 12px; /* 모서리 더 부드럽게 */
+        z-index: 2;
+        text-align: center;
+        min-width: 300px; /* 최소 너비 증가 */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* 그림자 강화 */
+        transition: all 0.3s ease;
+        letter-spacing: -0.02em; /* 자간 조정 */
+        line-height: 1.4; /* 행간 조정 */
+        backdrop-filter: blur(8px); /* 배경 블러 효과 */
+        border: 1px solid rgba(255, 255, 255, 0.2); /* 섬세한 테두리 */
+    }
+
+    #message:empty {
+        display: none;
+    }
+
+       /* 메시지 나타날 때 애니메이션 효과 */
+       @keyframes messageAppear {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -40%);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    #message:not(:empty) {
+        animation: messageAppear 0.3s ease-out forwards;
+    }
+
+    @media screen and (max-width: 768px) {
+        .logo img {
+            width: 200px;
+            height: 72px;
+        }
+
+        .message-text {
+            font-size: 18px;
+            margin-bottom: 0px;
+        }
+
+        .ampm {
+            font-size: 30px;
+            margin-right: 30px;
+        }
+        
+        .time-container {
+            margin-bottom: -10px;
+        }
+
+        #clock {
+            font-size: 90px;
+        }
+
+        .period-indicator {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        #message {
+            font-size: 28px;
+            min-width: 250px;
+            padding: 15px 30px;
+        }
+    }
+
+    @media screen and (max-width: 768px) and (orientation: landscape) {
+        .container {
+            padding: 10px;
+            height: auto;
+        }
+
+        .logo {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .logo img {
+            width: 180px;
+            height: 64px;
+        }
+
+        .message-text {
+            font-size: 12px;
+            margin-bottom: -20px;
+        }
+
+        .time-container {
+            margin-bottom: -20px;
+        }
+
+        .time-display {
+            margin-bottom: 20px;
+        }
+
+        .memo-section {
+            display: none;
+        }
+
+        .ampm {
+            font-size: 60px;
+            margin-right: 30px;
+        }
+
+        #clock {
+            font-size: 120px;
+        }
+
+        .period-indicator {
+            font-size: 25px;
+            padding: 8px 20px;
+            margin-bottom: 15px;
+        }
+    }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="logo">
+                <img src="자산 4@4x.png" alt="Studio Logo">
+            </div>
+            <div class="message-text">
+                당신의 꿈을 향한 모든 순간이 의미있기를.<br>
+                저희가 여러분과 함께하겠습니다.
+            </div>
+            <div class="time-container">
+                <div class="time-display">
+                    <span class="ampm" id="ampm">오전</span>
+                    <span id="clock">10:00</span>
+                </div>
+                <div id="message"></div>
+            </div>
+            <div class="period-indicator" id="period-display">1교시</div>
+            <div id="message"></div>
+            <div class="memo-section">
+                <div class="post-it">
+                    <div class="memo-label">Memo</div>
+                    <textarea id="custom-message" placeholder="메모를 입력하세요" maxlength="200"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const startBell = new Audio('short-school-bell.mp4');
+        const endBell = new Audio('end-bell.mp4');
+
+        function calculatePeriod(hours) {
+            if (hours >= 10 && hours <= 22) {
+                return hours - 9;
+            }
+            return '수업 시간 외';
+        }
+
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const ampm = hours >= 12 ? '오후' : '오전';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            document.getElementById('ampm').textContent = ampm;
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+
+            const period = calculatePeriod(now.getHours());
+            document.getElementById('period-display').textContent = 
+                typeof period === 'number' ? `${period}교시` : period;
+        }
+
+        function checkClassTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // 테스트용 시간 설정
+            // hours: 0-23 (시간)
+            // minutes: 0-59 (분)
+            // seconds: 0-59 (초)
+            // 사용하지 않을 때는 드래그 후 Ctrl + / 키로 주석 처리
+            // if (hours === 0 && minutes === 18 && seconds === 0) {  // 여기서 시간을 변경하세요
+            //     startBell.currentTime = 0;
+            //     startBell.play().catch(error => console.log('Error playing start bell:', error));
+            //     document.getElementById('message').textContent = `${calculatePeriod(hours)}교시 시작입니다`;
+                
+            //     setTimeout(() => {
+            //         document.getElementById('message').textContent = '';
+            //     }, 5000);
+            // }
+
+            // 쉬는 시간 알림
+            // if (hours === 0 && minutes === 18 && seconds === 30) {  // 위에서 설정한 시간과 동일하게 변경하세요
+            //     endBell.currentTime = 0;
+            //     endBell.play().catch(error => console.log('Error playing end bell:', error));
+            //     document.getElementById('message').textContent = '쉬는 시간입니다';
+                
+            //     setTimeout(() => {
+            //         document.getElementById('message').textContent = '';
+            //     }, 5000);
+            // }
+
+            // 수업 시간 내일 때만 교시 관련 메시지를 표시
+            if (hours >= 10 && hours <= 22) {
+                if (minutes === 0 && seconds === 0) {
+                    startBell.play();
+                    const period = calculatePeriod(hours);
+                    document.getElementById('message').textContent = `${period}교시 시작입니다`;
+                    
+                    setTimeout(() => {
+                        document.getElementById('message').textContent = '';
+                    }, 5000);
+                }
+
+                if (minutes === 50 && seconds === 0) {
+                    endBell.play();
+                    document.getElementById('message').textContent = '쉬는 시간입니다';
+                    
+                    setTimeout(() => {
+                        document.getElementById('message').textContent = '';
+                    }, 5000);
+                }
+            }
+        }
+
+        setInterval(() => {
+            updateClock();
+            checkClassTime();
+        }, 1000);
+
+        updateClock();
+
+        const customMessageInput = document.getElementById('custom-message');
+        customMessageInput.addEventListener('input', (e) => {
+            localStorage.setItem('customMessage', e.target.value);
+        });
+
+        window.addEventListener('load', () => {
+            const savedMessage = localStorage.getItem('customMessage');
+            if (savedMessage) {
+                customMessageInput.value = savedMessage;
+            }
+        });
+    </script>
+</body>
+</html>
