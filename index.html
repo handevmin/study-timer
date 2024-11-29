@@ -319,8 +319,8 @@
     </div>
 
     <script>
-        const startBell = new Audio('short-school-bell.mp4');
-        const endBell = new Audio('end-bell.mp4');
+        const startBell = new Audio('/audio/short-school-bell.mp4');
+        const endBell = new Audio('/audio/end-bell.mp4');
 
         function calculatePeriod(hours) {
             if (hours >= 10 && hours <= 22) {
@@ -358,7 +358,7 @@
             // minutes: 0-59 (분)
             // seconds: 0-59 (초)
             // 사용하지 않을 때는 드래그 후 Ctrl + / 키로 주석 처리
-            if (hours === 1 && minutes === 20 && seconds === 0) {  // 여기서 시간을 변경하세요
+            if (hours === 1 && minutes === 25 && seconds === 0) {  // 여기서 시간을 변경하세요
                  startBell.currentTime = 0;
                  startBell.play().catch(error => console.log('Error playing start bell:', error));
                  document.getElementById('message').textContent = `${calculatePeriod(hours)}교시 시작입니다`;
