@@ -1,456 +1,734 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ko">
 <head>
-    <title>스터디 타이머</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공부특별시</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
-
-        * {
+        body {
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        body {
+            background: radial-gradient(circle at right top, #2860b3, #164085, #00215A);
+            color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: white;
-            color: #333;
-        }
-
-        .container {
-            padding: 60px 40px;
-            width: 100%;
-            max-width: 100%;
             height: 100vh;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1500px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            flex-wrap: wrap;
+        }
+        
+        .content {
+            flex: 1;
             text-align: center;
+            min-width: 300px;
+        }
+        
+        .logo-container {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .logo-icon {
+            width: 120px;
+            height: 120px;
+            display: flex;
             justify-content: center;
             align-items: center;
+            margin-right: 25px;
         }
-
-        .logo {
-            margin-bottom: 40px;
+        
+        .logo-icon img {
+            height: 140%;
+            filter: brightness(0) invert(1); /* 이미지를 흰색으로 변환 */
         }
-
-        .logo img {
-            width: 302px;
-            height: 108px;
-            object-fit: contain;
-        }
-
-        .message-text {
-            font-size: 24px;
-            color: #666;
-            margin-bottom: 40px;
-            line-height: 1.5;
-        }
-
-        .time-display {
+        
+        .logo-text-container {
             display: flex;
-            justify-content: center;
-            align-items: baseline;
+            flex-direction: column;
+        }
+        
+        .logo-text {
+            font-size: 80px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            font-size: 30px;
+            margin-left: 0;
+        }
+        
+        .message {
+            font-size: 30px;
+            line-height: 1.6;
             margin-bottom: 40px;
-        }
-
-        .ampm {
-            font-size: 70px;
-            color: #666;
-            margin-right: 50px;
-            writing-mode: horizontal-tb;
-        }
-
-        #clock {
-            font-size: 172px;
-            font-weight: 300;
-            color: #333;
-        }
-
-        .period-indicator {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #f8f9fa;
-            color: #495057;
-            border-radius: 12px;
-            font-size: 40px;
-            font-weight: 500;
-            margin-bottom: 30px;
-        }
-
-        #message {
-            font-size: 20px;
-            min-height: 30px;
-            margin-bottom: 30px;
-            color: #495057;
-        }
-
-        .memo-section {
-            margin: 40px auto 0;
-            width: 300px;
-            transform: rotate(-2deg);
-        }
-
-        .post-it {
-            background: #82dcff82;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: relative;
-            min-height: 180px;
-            border-radius: 2px;
             text-align: center;
         }
-
-        .post-it::before {
+        
+        .time-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .time {
+            font-size: 170px;
+        }
+        
+        .time-label {
+            font-size: 60px;
+            margin-right: 25px;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 18px 50px;
+            font-size: 36px;
+            background-color: transparent;
+            color: white;
+            border: 3px solid white;
+            border-radius: 15px;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .clock {
+            flex: 1;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+        }
+        
+        .clock-face {
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 0 0 5px transparent;
+            position: relative;
+            background-color: #00215A;
+            background: radial-gradient(circle at center, #143b7d, #00215A);
+            position: relative;
+        }
+        
+        .clock-face::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 30px;
-            background: rgba(0, 0, 0, 0.02);
-            border-radius: 2px 2px 0 0;
+            top: -5px;
+            right: -5px;
+            bottom: -5px;
+            left: -5px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #3a8eff, #82c6ff, #1a78e6, #3a8eff);
+            z-index: -1;
         }
-
-        .memo-label {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        #custom-message {
-            width: 100%;
-            min-height: 120px;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            font-size: 16px;
-            resize: none;
-            line-height: 1.5;
-        }
-
-        #custom-message:focus {
-            outline: none;
-        }
-
-        #custom-message::placeholder {
-            color: #919191;
-        }
-
-        .main-content {
-            max-width: 906px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .time-container {
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        .time-display {
-            display: flex;
-            justify-content: center;
-            align-items: baseline;
-            position: relative;
-            z-index: 1;
-        }
-
-        #message {
+        
+        .clock-hand {
             position: absolute;
+            background-color: #3a8eff;
+            transform-origin: bottom center;
+            z-index: 10;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        
+        .hour-hand {
+            width: 36px;
+            height: 150px;
+            top: 100px;
+            left: 232px;
+            background: linear-gradient(to top, #b6c0d3, #ebebeb);
+            clip-path: polygon(50% 0%, 40% 100%, 60% 100%);
+        }
+        
+        .minute-hand {
+            width: 30px;
+            height: 200px;
+            top: 50px;
+            left: 235px;
+            background: linear-gradient(to top, #b6c0d3, #ebebeb);
+            clip-path: polygon(50% 0%, 35% 100%, 65% 100%);
+        }
+        
+        .second-hand {
+            width: 3px;
+            height: 225px;
+            top: 25px;
+            left: 248.5px;
+            background-color: #6bb8ff;
+            clip-path: polygon(50% 0%, 20% 100%, 80% 100%);
+        }
+        
+        .center-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 40% 40%, #ebebeb, #1a78e6);
+            border-radius: 50%;
+            top: 240px;
+            left: 240px;
+            box-shadow: 0 0 10px 3px rgba(46, 130, 255, 0.7);
+            z-index: 20;
+        }
+        
+        .tick {
+            position: absolute;
+            width: 3px;
+            height: 20px;
+            background-color: white;
+            left: 248.5px;
+            transform-origin: center 250px;
+        }
+        
+        /* 시각 표시 - 더 길게 조정 */
+        .tick.hour {
+            height: 25px;
+            width: 4px;
+        }
+        
+        /* 12개의 시각 표시 */
+        .tick:nth-child(1) { transform: rotate(0deg); top: 0; }
+        .tick:nth-child(2) { transform: rotate(30deg); top: 0; }
+        .tick:nth-child(3) { transform: rotate(60deg); top: 0; }
+        .tick:nth-child(4) { transform: rotate(90deg); top: 0; }
+        .tick:nth-child(5) { transform: rotate(120deg); top: 0; }
+        .tick:nth-child(6) { transform: rotate(150deg); top: 0; }
+        .tick:nth-child(7) { transform: rotate(180deg); top: 0; }
+        .tick:nth-child(8) { transform: rotate(210deg); top: 0; }
+        .tick:nth-child(9) { transform: rotate(240deg); top: 0; }
+        .tick:nth-child(10) { transform: rotate(270deg); top: 0; }
+        .tick:nth-child(11) { transform: rotate(300deg); top: 0; }
+        .tick:nth-child(12) { transform: rotate(330deg); top: 0; }
+        
+        /* 알림 메시지 스타일 */
+        #message {
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 36px;
-            /* 글씨 크기 증가 */
-            font-weight: 700;
-            /* 더 굵은 폰트 웨이트 */
-            color: #01439A;
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 20px 40px;
-            /* 패딩 증가 */
-            border-radius: 12px;
-            /* 모서리 더 부드럽게 */
-            z-index: 2;
+            background: linear-gradient(135deg, rgba(58, 142, 255, 0.9), rgba(26, 120, 230, 0.9));
+            color: white;
+            padding: 30px 50px;
+            border-radius: 15px;
+            font-size: 40px;
+            font-weight: bold;
             text-align: center;
-            min-width: 300px;
-            /* 최소 너비 증가 */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            /* 그림자 강화 */
-            transition: all 0.3s ease;
-            letter-spacing: -0.02em;
-            /* 자간 조정 */
-            line-height: 1.4;
-            /* 행간 조정 */
-            backdrop-filter: blur(8px);
-            /* 배경 블러 효과 */
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            /* 섬세한 테두리 */
-        }
-
-        #message:empty {
+            z-index: 200;
             display: none;
+            box-shadow: 0 0 30px rgba(0, 33, 90, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            min-width: 400px;
+            animation: fadeInOut 5s ease-in-out;
         }
-
-        /* 메시지 나타날 때 애니메이션 효과 */
-        @keyframes messageAppear {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -40%);
-            }
-
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
         }
-
+        
         #message:not(:empty) {
-            animation: messageAppear 0.3s ease-out forwards;
+            display: block;
+        }
+        
+        /* 커스텀 메시지 입력 영역 */
+        .custom-message-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+        }
+        
+        #custom-message {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0, 33, 90, 0.7);
+            border: 2px solid #3a8eff;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
         }
 
-        @media screen and (max-width: 768px) {
-            .logo img {
-                width: 200px;
-                height: 72px;
-            }
-
-            .message-text {
-                font-size: 18px;
-                margin-bottom: 0px;
-            }
-
-            .ampm {
-                font-size: 30px;
-                margin-right: 30px;
-            }
-
-            .time-container {
-                margin-bottom: -10px;
-            }
-
-            #clock {
-                font-size: 90px;
-            }
-
-            .period-indicator {
-                font-size: 25px;
-                margin-bottom: 10px;
-            }
-
-            #message {
-                font-size: 28px;
-                min-width: 250px;
-                padding: 15px 30px;
-            }
-        }
-
-        @media screen and (max-width: 768px) and (orientation: landscape) {
+        /* 반응형 디자인을 위한 미디어 쿼리 */
+        @media screen and (max-width: 1200px) {
             .container {
-                padding: 10px;
+                flex-direction: column;
+                padding: 20px;
+                overflow-y: auto;
+                justify-content: center;
+            }
+            
+            .content {
+                margin-bottom: 30px;
+                width: 100%;
+            }
+            
+            .clock-face {
+                width: 400px;
+                height: 400px;
+            }
+            
+            .center-dot {
+                top: 190px;
+                left: 190px;
+            }
+            
+            .hour-hand {
+                top: 80px;
+                left: 182px;
+                height: 120px;
+            }
+            
+            .minute-hand {
+                top: 40px;
+                left: 185px;
+                height: 160px;
+            }
+            
+            .second-hand {
+                top: 20px;
+                left: 198.5px;
+                height: 180px;
+            }
+            
+            .tick {
+                left: 198.5px;
+                transform-origin: center 200px;
+            }
+            
+            .logo-text {
+                font-size: 60px;
+            }
+            
+            .message {
+                font-size: 24px;
+            }
+            
+            .time {
+                font-size: 130px;
+            }
+            
+            .time-label {
+                font-size: 45px;
+            }
+            
+            .button {
+                font-size: 30px;
+                padding: 15px 40px;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            body {
+                overflow-y: auto;
                 height: auto;
+                min-height: 100vh;
             }
-
-            .logo {
-                margin-top: 10px;
-                margin-bottom: 10px;
+            
+            .container {
+                padding: 15px;
             }
-
-            .logo img {
-                width: 180px;
-                height: 64px;
-            }
-
-            .message-text {
-                font-size: 12px;
-                margin-bottom: -20px;
-            }
-
-            .time-container {
-                margin-bottom: -20px;
-            }
-
-            .time-display {
+            
+            .content {
                 margin-bottom: 20px;
             }
-
-            .memo-section {
-                display: none;
+            
+            .logo {
+                flex-direction: column;
+                margin-bottom: 20px;
             }
-
-            .ampm {
-                font-size: 60px;
-                margin-right: 30px;
+            
+            .logo-icon {
+                margin-right: 0;
+                margin-bottom: 10px;
             }
-
-            #clock {
-                font-size: 120px;
+            
+            .logo-text {
+                font-size: 50px;
             }
-
-            .period-indicator {
-                font-size: 25px;
-                padding: 8px 20px;
-                margin-bottom: 15px;
+            
+            .message {
+                font-size: 20px;
+                margin-bottom: 30px;
+                padding: 0 10px;
+            }
+            
+            .time-container {
+                margin-bottom: 30px;
+            }
+            
+            .time {
+                font-size: 100px;
+            }
+            
+            .time-label {
+                font-size: 35px;
+                margin-right: 15px;
+            }
+            
+            .button {
+                font-size: 24px;
+                padding: 12px 30px;
+            }
+            
+            .clock-face {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .center-dot {
+                top: 140px;
+                left: 140px;
+            }
+            
+            .hour-hand {
+                top: 60px;
+                left: 132px;
+                height: 90px;
+                width: 36px;
+            }
+            
+            .minute-hand {
+                top: 30px;
+                left: 135px;
+                height: 120px;
+                width: 30px;
+            }
+            
+            .second-hand {
+                top: 15px;
+                left: 148.5px;
+                height: 135px;
+            }
+            
+            .tick {
+                left: 148.5px;
+                transform-origin: center 150px;
+            }
+            
+            #message {
+                padding: 20px 30px;
+                font-size: 24px;
+                min-width: 300px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .logo-text {
+                font-size: 40px;
+            }
+            
+            .message {
+                font-size: 18px;
+                line-height: 1.4;
+            }
+            
+            .time {
+                font-size: 70px;
+            }
+            
+            .time-label {
+                font-size: 28px;
+                margin-right: 10px;
+            }
+            
+            .button {
+                font-size: 20px;
+                padding: 10px 25px;
+                border-width: 2px;
+            }
+            
+            .clock-face {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .center-dot {
+                top: 115px;
+                left: 115px;
+                width: 15px;
+                height: 15px;
+            }
+            
+            .hour-hand {
+                top: 50px;
+                left: 108px;
+                height: 75px;
+                width: 34px;
+            }
+            
+            .minute-hand {
+                top: 25px;
+                left: 110px;
+                height: 100px;
+                width: 28px;
+            }
+            
+            .second-hand {
+                top: 15px;
+                left: 123.5px;
+                height: 110px;
+            }
+            
+            .tick {
+                left: 123.5px;
+                transform-origin: center 125px;
+            }
+            
+            #message {
+                padding: 15px 20px;
+                font-size: 20px;
+                min-width: 250px;
+                max-width: 90%;
             }
         }
     </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 </head>
-
 <body>
+    <!-- 알림 메시지 표시 요소 -->
+    <div id="message"></div>
+    
     <div class="container">
-        <div class="main-content">
-            <div class="logo">
-                <img src="자산 4@4x.png" alt="Studio Logo">
+        <div class="content">
+            <div class="logo-container">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="logo.png" alt="공부특별시 로고">
+                    </div>
+                    <div class="logo-text-container">
+                        <div class="logo-text">공부특별시</div>
+                    </div>
+                </div>
             </div>
-            <div class="message-text">
+            <div class="message">
                 당신의 꿈을 향한 모든 순간이 의미있기를.<br>
                 저희가 여러분과 함께하겠습니다.
             </div>
             <div class="time-container">
-                <div class="time-display">
-                    <span class="ampm" id="ampm">오전</span>
-                    <span id="clock">10:00</span>
-                </div>
-                <div id="message"></div>
+                <span class="time-label" id="ampm">오후</span>
+                <span class="time" id="clock">8:59</span>
             </div>
-            <div class="period-indicator" id="period-display">1교시</div>
-            <div id="message"></div>
-            <div class="memo-section">
-                <div class="post-it">
-                    <div class="memo-label">Memo</div>
-                    <textarea id="custom-message" placeholder="메모를 입력하세요" maxlength="200"></textarea>
-                </div>
+            <div class="button-container">
+                <a href="#" class="button" id="period-display">11교시</a>
+            </div>
+        </div>
+        <div class="clock">
+            <div class="clock-face">
+                <!-- 12개의 시간 눈금 -->
+                <div class="tick hour"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick hour"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick hour"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick hour"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <!-- 시계 바늘 -->
+                <div class="clock-hand hour-hand"></div>
+                <div class="clock-hand minute-hand"></div>
+                <div class="clock-hand second-hand"></div>
+                <div class="center-dot"></div>
             </div>
         </div>
     </div>
+    
+    <!-- 오디오 요소 추가 -->
+    <audio id="startBell" preload="auto">
+        <source src="/audio/start-bell.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="endBell" preload="auto">
+        <source src="/audio/end-bell.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        // audio 파일 경로를 절대 경로로 수정
-        const startBell = new Audio('/audio/short-school-bell.mp4');
-        const endBell = new Audio('/audio/end-bell.mp4');
+        // 오디오 요소 참조
+        const startBell = document.getElementById('startBell');
+        const endBell = document.getElementById('endBell');
 
+        // 오디오 볼륨 설정
+        startBell.volume = 1.0;
+        endBell.volume = 1.0;
 
-        // 오디오 설정
-        startBell.muted = false;
-        endBell.muted = false;
-        startBell.preload = 'auto';
-        endBell.preload = 'auto';
+        // 메시지 표시 함수 추가
+        function showMessage(text) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = text;
+            
+            // 5초 후에 메시지 내용을 지워서 화면에서 없애기
+            setTimeout(() => {
+                messageElement.textContent = '';
+            }, 5000);
+        }
 
-        // forcedPlay 함수 추가
-        async function forcedPlay(audio) {
-            try {
-                // 볼륨을 명시적으로 설정
-                audio.volume = 1;
-                // 재생 시도
-                await audio.play();
-            } catch (error) {
-                console.error('오디오 재생 실패:', error);
-                // 실패 시 재시도
-                setTimeout(() => forcedPlay(audio), 100);
+        // 오디오 재생 함수
+        function playBell(audio) {
+            audio.currentTime = 0;
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    console.log('오디오 재생 성공');
+                })
+                .catch(error => {
+                    console.log('오디오 재생 실패, 다시 시도:', error);
+                    setTimeout(() => playBell(audio), 100);
+                });
             }
         }
 
+        // 교시 계산 함수
         function calculatePeriod(hours) {
             if (hours >= 10 && hours <= 22) {
                 return hours - 9;
             }
-            return '수업 시간 외 ';
+            return '수업 시간 외';
         }
 
+        // 타이머를 저장할 변수
+        let nextClassTimer;
+        
+        // 다음 수업 시작 또는 종료 시간을 계산하고 타이머 설정하는 함수
+        function scheduleNextClassTime() {
+            const now = new Date();
+            const nextTime = new Date(now);
+            
+            // 현재 분이 50분 미만이면 다음 50분을 타겟으로, 아니면 다음 시간 정각을 타겟으로
+            if (now.getMinutes() < 50) {
+                nextTime.setMinutes(50, 0, 0);
+            } else {
+                nextTime.setHours(now.getHours() + 1, 0, 0, 0);
+            }
+            
+            // 다음 이벤트까지 남은 시간 (밀리초)
+            const timeUntilNext = nextTime - now;
+            
+            // 기존 타이머 정리
+            if (nextClassTimer) {
+                clearTimeout(nextClassTimer);
+            }
+            
+            // 다음 이벤트 타이머 설정
+            nextClassTimer = setTimeout(() => {
+                const eventTime = new Date();
+                const hours = eventTime.getHours();
+                const minutes = eventTime.getMinutes();
+                
+                // 10시~22시 사이의 수업 시간만 체크
+                if (hours >= 8 && hours <= 22) {
+                    // 정각인 경우 수업 시작
+                    if (minutes === 0) {
+                        playBell(startBell);
+                        const period = calculatePeriod(hours);
+                        showMessage(`${period}교시 시작입니다`);
+                    }
+                    // 50분인 경우 쉬는 시간
+                    else if (minutes === 50) {
+                        playBell(endBell);
+                        showMessage('쉬는 시간입니다');
+                    }
+                }
+                
+                // 다음 이벤트 예약
+                scheduleNextClassTime();
+            }, timeUntilNext);
+            
+            console.log(`다음 알림 예약됨: ${nextTime.toLocaleTimeString()}, ${timeUntilNext / 1000}초 후`);
+        }
+
+        // 시계 업데이트 함수
         function updateClock() {
             const now = new Date();
             let hours = now.getHours();
-            const ampm = hours >= 12 ? '오후' : '오전';
-
-            hours = hours % 12;
-            hours = hours ? hours : 12;
-
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-
-            document.getElementById('ampm').textContent = ampm;
-            document.getElementById('clock').textContent = `${hours}:${minutes}`;
-
-            const period = calculatePeriod(now.getHours());
-            document.getElementById('period-display').textContent =
-                typeof period === 'number' ? `${period}교시` : period;
-        }
-
-        function checkClassTime() {
-            const now = new Date();
-            const hours = now.getHours();
             const minutes = now.getMinutes();
             const seconds = now.getSeconds();
+            const milliseconds = now.getMilliseconds();
+            
+            const ampm = hours >= 12 ? '오후' : '오전';
+            const displayHours = hours % 12;
+            const formattedHours = displayHours ? displayHours : 12; // 12시간제로 변환
+            
+            const formattedTime = `${formattedHours}:${minutes.toString().padStart(2, '0')}`;
+            
+            document.getElementById('ampm').textContent = ampm;
+            document.getElementById('clock').textContent = formattedTime;
+            
+            // 교시 표시 업데이트
+            const period = calculatePeriod(hours);
+            document.getElementById('period-display').textContent = 
+                typeof period === 'number' ? `${period}교시` : period;
+            
+            // 시계 바늘 회전 - 부드러운 움직임을 위해 밀리초 고려
+            const hourDeg = (formattedHours * 30) + (minutes * 0.5); // 시간당 30도 + 분당 0.5도
+            const minuteDeg = minutes * 6 + (seconds * 0.1); // 분당 6도 + 초당 0.1도
+            const secondDeg = seconds * 6 + (milliseconds * 0.006); // 초당 6도 + 밀리초 고려
+            
+            document.querySelector('.hour-hand').style.transform = `rotate(${hourDeg}deg)`;
+            document.querySelector('.minute-hand').style.transform = `rotate(${minuteDeg}deg)`;
+            document.querySelector('.second-hand').style.transform = `rotate(${secondDeg}deg)`;
+        }
 
-            // 테스트용 시간 설정
-            // hours: 0-23 (시간)
-            // minutes: 0-59 (분)
-            // seconds: 0-59 (초)
-            // 사용하지 않을 때는 드래그 후 Ctrl + / 키로 주석 처리
-            // if (hours === 23 && minutes === 23 && seconds === 30) {  // 여기서 시간을 변경하세요
-            //     startBell.currentTime = 0;
-            //     startBell.play().catch(error => console.log('Error playing start bell:', error));
-            //     document.getElementById('message').textContent = `${calculatePeriod(hours)}교시 시작입니다`;
+        // 시계 업데이트를 위한 인터벌 (100ms마다)
+        setInterval(updateClock, 100);
 
-            //     setTimeout(() => {
-            //         document.getElementById('message').textContent = '';
-            //     }, 5000);
-            // }
+        // 페이지 로드 시 초기화
+        updateClock();
+        scheduleNextClassTime();
 
-
-            // // 쉬는 시간 알림
-            // if (hours === 23 && minutes === 24 && seconds === 40) {  // 위에서 설정한 시간과 동일하게 변경하세요
-            //     endBell.currentTime = 0;
-            //     endBell.play().catch(error => console.log('Error playing start bell:', error));
-            //     document.getElementById('message').textContent = '쉬는 시간입니다';
-
-            //     setTimeout(() => {
-            //         document.getElementById('message').textContent = '';
-            //     }, 5000);
-            // }
-
-            // 수업 시간 내일 때만 교시 관련 메시지를 표시
-            if (hours >= 10 && hours <= 22) {
-                if (minutes === 0 && seconds === 0) {
-                    forcedPlay(startBell);
-                    const period = calculatePeriod(hours);
-                    document.getElementById('message').textContent = `${period}교시 시작입니다`;
-
-                    setTimeout(() => {
-                        document.getElementById('message').textContent = '';
-                    }, 5000);
-                }
-
-                if (minutes === 50 && seconds === 0) {
-                    forcedPlay(endBell);
-                    document.getElementById('message').textContent = '쉬는 시간입니다';
-
-                    setTimeout(() => {
-                        document.getElementById('message').textContent = '';
-                    }, 5000);
-                }
+        // 테스트 함수 (브라우저 콘솔에서 호출 가능)
+        function testBell(type) {
+            if (type === 'start') {
+                playBell(startBell);
+                showMessage('테스트: 수업 시작 알림');
+            } else if (type === 'end') {
+                playBell(endBell);
+                showMessage('테스트: 쉬는 시간 알림');
             }
         }
 
-        setInterval(() => {
-            updateClock();
-            checkClassTime();
-        }, 1000);
-
-        updateClock();
-
+        // 커스텀 메시지 처리
         const customMessageInput = document.getElementById('custom-message');
         customMessageInput.addEventListener('input', (e) => {
             localStorage.setItem('customMessage', e.target.value);
         });
 
+        // 페이지 로드 시 저장된 커스텀 메시지 불러오기
         window.addEventListener('load', () => {
             const savedMessage = localStorage.getItem('customMessage');
             if (savedMessage) {
@@ -459,5 +737,4 @@
         });
     </script>
 </body>
-
-</html>
+</html> 
