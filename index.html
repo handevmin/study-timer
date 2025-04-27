@@ -284,6 +284,12 @@
 
         /* 반응형 디자인을 위한 미디어 쿼리 */
         @media screen and (max-width: 1200px) {
+            .logo-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
             .container {
                 flex-direction: column;
                 padding: 20px;
@@ -331,6 +337,7 @@
             
             .logo-text {
                 font-size: 60px;
+                margin-top: 30px;
             }
             
             .message {
@@ -357,6 +364,13 @@
                 height: auto;
                 min-height: 100vh;
             }
+
+            .logo-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 0px;
+            }
             
             .container {
                 padding: 15px;
@@ -378,6 +392,7 @@
             
             .logo-text {
                 font-size: 50px;
+                margin-top: 30px;
             }
             
             .message {
@@ -447,8 +462,16 @@
         }
         
         @media screen and (max-width: 480px) {
+            .logo-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 0px;
+            }
+
             .logo-text {
                 font-size: 40px;
+                margin-top: 30px;
             }
             
             .message {
@@ -654,9 +677,17 @@
                 if (hours >= 8 && hours <= 22) {
                     // 정각인 경우 수업 시작
                     if (minutes === 0) {
-                        playBell(startBell);
                         const period = calculatePeriod(hours);
-                        showMessage(`${period}교시 시작입니다`);
+                        
+                        // 수업 시간 내인 경우와 외인 경우 구분
+                        if (typeof period === 'number') {
+                            playBell(startBell);
+                            showMessage(`${period}교시 시작입니다`);
+                        } else {
+                            // 수업 시간 외인 경우에는 다른 메시지 표시
+                            playBell(startBell);
+                            showMessage('자율 학습 시간입니다');
+                        }
                     }
                     // 50분인 경우 쉬는 시간
                     else if (minutes === 50) {
